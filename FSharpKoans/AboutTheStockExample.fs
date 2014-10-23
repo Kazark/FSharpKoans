@@ -1,5 +1,6 @@
 ﻿namespace FSharpKoans
 open FSharpKoans.Core
+open System
 
 //---------------------------------------------------------------
 // Apply Your Knowledge!
@@ -55,8 +56,39 @@ module ``about the stock example`` =
     // tests for yourself along the way. You can also try 
     // using the F# Interactive window to check your progress.
 
+    type StockDatum = {date : string; difference: decimal}
+    //let dateAndOpenToClose (day : string) openAmount closeAmount =
+        //abs openAmount - closeAmount |> DateAndDifference day
+
+    [<Koan>]
+    let ``maximum difference between StockDatum``() =
+        let data = [
+            { date = "03/03/2014"; difference = 2.78m}
+            { date = "02/02/2014"; difference = 3.14m}
+            { date = "01/01/2014"; difference = 1.41m}
+        ]
+        let max = Seq.maxBy (fun d -> d.difference) data
+
+        AssertEquality "02/02/2014" max.date
+
+    let parse (line:string) =
+        let split = line.Split [|','|]
+        {
+            date = split.[0]
+            difference = (Decimal.Parse split.[1]) - (Decimal.Parse split.[4]) |> abs
+        }
+
+    [<Koan>]
+    let ``parse one line to a StockDatum``() =
+        let parsed = parse "2012-03-02,32.31,32.44,32.00,32.08,47314200,32.08"
+        AssertEquality "2012-03-02" parsed.date
+        AssertEquality 0.23m parsed.difference
+
     [<Koan>]
     let YouGotTheAnswerCorrect() =
-        let result =  __
+        let result =
+            Seq.skip 1 stockData
+            |> Seq.map parse
+            |> Seq.maxBy (fun d -> d.difference)
         
-        AssertEquality "2012-03-13" result
+        AssertEquality "2012-03-13" result.date
