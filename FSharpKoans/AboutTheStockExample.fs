@@ -92,3 +92,12 @@ module ``about the stock example`` =
             |> Seq.maxBy (fun d -> d.difference)
         
         AssertEquality "2012-03-13" result.date
+
+    [<Koan>]
+    let DarrinsCompactSolutionCompactedFurtherByMe() =
+        let result = stockData.Tail
+                    |> List.map (fun x -> x.Split [|','|])
+                    |> List.maxBy (fun x -> abs(decimal x.[1] - decimal x.[4]))
+                    |> (fun x -> x.[0])
+
+        AssertEquality "2012-03-13" result
